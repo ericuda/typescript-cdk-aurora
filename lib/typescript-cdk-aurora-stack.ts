@@ -28,6 +28,9 @@ export class TypescriptCdkAuroraStack extends cdk.Stack {
     const cluster = new rds.DatabaseCluster(this, 'Aurora-Test-Cluster', {
       engine: rds.DatabaseClusterEngine.AURORA_POSTGRESQL,
       copyTagsToSnapshot: true,
+      writer: rds.ClusterInstance.provisioned('writer', {
+        publiclyAccessible: false,
+      }),
       parameterGroup: rds.ParameterGroup.fromParameterGroupName(this, 'ParameterGroup', 'default.aurora-postgresql11'),
       vpc,
       vpcSubnets: { subnets: [privateSubnet1, privateSubnet2] },
