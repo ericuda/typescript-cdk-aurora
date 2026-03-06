@@ -36,6 +36,7 @@ export class TypescriptCdkAuroraStack extends cdk.Stack {
       vpc,
       vpcSubnets: { subnets: [privateSubnet1, privateSubnet2] },
       iamAuthentication: true,
+      deletionProtection: true,
     });
 
     const dbrole = new iam.Role(this, 'DBRole', { 
