@@ -2,6 +2,7 @@ import * as cdk from 'aws-cdk-lib/core';
 import { Construct } from 'constructs';
 import * as rds from 'aws-cdk-lib/aws-rds';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as iam from 'aws-cdk-lib/aws-iam';
 
 export class TypescriptCdkAuroraStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -35,5 +36,10 @@ export class TypescriptCdkAuroraStack extends cdk.Stack {
       vpc,
       vpcSubnets: { subnets: [privateSubnet1, privateSubnet2] },
     });
+
+    const dbrole = new iam.Role(this, 'DBRole', { 
+      assumedBy: new iam.ServicePrincipal('someservice.amazonaws.com') 
+    }); 
+    cluster.grantConnect(dbrole, 'somedbuser');
   }
 }
