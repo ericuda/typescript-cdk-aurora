@@ -38,7 +38,7 @@ export class TypescriptCdkAuroraStack extends cdk.Stack {
     });
 
     const dbrole = new iam.Role(this, 'DBRole', { 
-      assumedBy: new iam.ServicePrincipal('someservice.amazonaws.com') 
+      assumedBy: new iam.ServicePrincipal('rds.amazonaws.com') 
     }); 
     cluster.grantConnect(dbrole, 'somedbuser');
   }
