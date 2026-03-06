@@ -34,6 +34,12 @@ pipeline {
             }
         }
 
+        stage('Version Check') {
+            steps {
+                sh 'which cdk && cdk --version'
+            }
+        }
+
         stage('CDK Deploy') {
             when {
                 expression { params.ACTION == 'deploy' }
