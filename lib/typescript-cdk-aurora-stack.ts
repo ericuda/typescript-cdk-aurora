@@ -31,7 +31,7 @@ export class TypescriptCdkAuroraStack extends cdk.Stack {
       writer: rds.ClusterInstance.provisioned('writer', {
         publiclyAccessible: false,
       }),
-      parameterGroup: rds.ParameterGroup.fromParameterGroupName(this, 'ParameterGroup', 'default.aurora-postgresql11'),
+      // parameterGroup: rds.ParameterGroup.fromParameterGroupName(this, 'ParameterGroup', 'default.aurora-postgresql11'),
       vpc,
       vpcSubnets: { subnets: [privateSubnet1, privateSubnet2] },
     });
