@@ -1,0 +1,78 @@
+pipeline {
+    agent { label 'deploy-agent' }
+
+    parameters {
+        choice(
+            name: 'ACTION',
+            choices: ['deploy', 'destroy'],
+            description: 'Choose whether to deploy or destroy the CDK stack'
+        )
+    }
+
+    environment {
+        AWS_REGION = 'us-east-1'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    credentialsId: 'github-credentials',
+                    url: 'https://github.com/ericuda/typescript-cdk-aurora'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm ci'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'npm run build'
+            }
+        }
+
+        stage('CDK Deploy') {
+            when {
+                expression { params.ACTION == 'deploy' }
+            }
+            steps {
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'ejs_aws',
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                ]]) {
+                    sh 'npx cdk deploy --require-approval never'
+                }
+            }
+        }
+
+        stage('CDK Destroy') {
+            when {
+                expression { params.ACTION == 'destroy' }
+            }
+            steps {
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'ejs_aws',
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                ]]) {
+                    sh 'npx cdk destroy --force'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "✅ CDK ${params.ACTION} completed successfully!"
+        }
+        failure {
+            echo "❌ CDK ${params.ACTION} failed."
+        }
+    }
+}
