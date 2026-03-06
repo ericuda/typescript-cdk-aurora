@@ -25,19 +25,12 @@ export class TypescriptCdkAuroraStack extends cdk.Stack {
       availabilityZone: vpc.availabilityZones[1],
     });
 
-    const cluster = new rds.ServerlessCluster(this, 'Aurora-Test-Cluster', {
+    const cluster = new rds.DatabaseCluster(this, 'Aurora-Test-Cluster', {
       engine: rds.DatabaseClusterEngine.AURORA_POSTGRESQL,
       copyTagsToSnapshot: true,
       parameterGroup: rds.ParameterGroup.fromParameterGroupName(this, 'ParameterGroup', 'default.aurora-postgresql11'),
       vpc,
       vpcSubnets: { subnets: [privateSubnet1, privateSubnet2] },
-      scaling: {
-        autoPause: cdk.Duration.minutes(10),
-        minCapacity: rds.AuroraCapacityUnit.ACU_8,
-        maxCapacity: rds.AuroraCapacityUnit.ACU_32,
-        timeout: cdk.Duration.seconds(100),
-        timeoutAction: rds.TimeoutAction.FORCE_APPLY_CAPACITY_CHANGE
-      }
     });
   }
 }
