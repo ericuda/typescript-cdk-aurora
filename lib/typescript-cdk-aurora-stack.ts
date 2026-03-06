@@ -31,10 +31,10 @@ export class CdkTypescriptLabStack extends cdk.Stack {
       parameterGroup: rds.ParameterGroup.fromParameterGroupName(this, 'ParameterGroup', 'default.aurora-postgresql11'),
       vpc,
       scaling: {
-        autoPause: Duration.minutes(10),
+        autoPause: cdk.Duration.minutes(10),
         minCapacity: rds.AuroraCapacityUnit.ACU_8,
         maxCapacity: rds.AuroraCapacityUnit.ACU_32,
-        timeout: Duration.seconds(100),
+        timeout: cdk.Duration.seconds(100),
         timeoutAction: rds.TimeoutAction.FORCE_APPLY_CAPACITY_CHANGE
       }
     });
