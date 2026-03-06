@@ -30,6 +30,7 @@ export class TypescriptCdkAuroraStack extends cdk.Stack {
       copyTagsToSnapshot: true,
       parameterGroup: rds.ParameterGroup.fromParameterGroupName(this, 'ParameterGroup', 'default.aurora-postgresql11'),
       vpc,
+      vpcSubnets: { subnets: [privateSubnet1, privateSubnet2] },
       scaling: {
         autoPause: cdk.Duration.minutes(10),
         minCapacity: rds.AuroraCapacityUnit.ACU_8,
