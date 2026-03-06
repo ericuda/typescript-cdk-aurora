@@ -35,6 +35,7 @@ export class TypescriptCdkAuroraStack extends cdk.Stack {
       // parameterGroup: rds.ParameterGroup.fromParameterGroupName(this, 'ParameterGroup', 'default.aurora-postgresql11'),
       vpc,
       vpcSubnets: { subnets: [privateSubnet1, privateSubnet2] },
+      iamAuthentication: true,
     });
 
     const dbrole = new iam.Role(this, 'DBRole', { 
