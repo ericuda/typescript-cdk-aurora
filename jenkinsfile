@@ -51,7 +51,7 @@ pipeline {
                     accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                 ]]) {
-                    sh 'npx cdk deploy --require-approval never'
+                    sh 'cdk deploy --require-approval never'
                 }
             }
         }
@@ -67,7 +67,7 @@ pipeline {
                     accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                 ]]) {
-                    sh 'npx cdk destroy --force'
+                    sh 'cdk destroy --force'
                 }
             }
         }
